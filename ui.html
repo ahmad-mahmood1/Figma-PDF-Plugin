@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Direct PDF Download</title>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+  </head>
+  <script>
+    parent.postMessage(
+      {
+        pluginMessage: "generate_frame_images",
+      },
+      "*"
+    );
+
+    onmessage = (event) => {
+      let message = event.data.pluginMessage;
+
+      if (message === "no_frames_on_page") {
+        alert("No frames available");
+      } else {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: "l", format: [1080, 1920] });
+        let width = doc.internal.pageSize.width;
+        let height = doc.internal.pageSize.height;
+
+        const images = event.data.pluginMessage;
+        images.forEach((unitArr, i) => {
+          if (i > 0) {
+            doc.addPage();
+            doc.setPage(i + 1);
+          }
+          doc.addImage(unitArr, "PNG", 0, 0, width, height);
+        });
+        console.log("saving");
+        doc.save("plugin.pdf");
+      }
+
+      parent.postMessage({ pluginMessage: "close_plugin" }, "*");
+    };
+  </script>
+  <body></body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "name": "PanelSort",
+  "id": "1286907638133576764",
+  "api": "1.0.0",
+  "main": "dist/index.js",
+  "ui": "ui.html",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["https://api.figma.com", "https://unpkg.com"]
+  }
+}
