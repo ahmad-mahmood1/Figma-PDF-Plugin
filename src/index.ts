@@ -13,11 +13,24 @@ figma.ui.onmessage = (message) => {
   }
 
   if (message === GENERATE_FRAME_IMAGES) {
-    generateImages();
+    convertFramesToSvg();
   }
 };
 
-async function generateImages() {
+async function generateSvg(node: SceneNode) {
+  let svg = await node.exportAsync({
+    format: "SVG_STRING",
+  });
+
+  return {
+    svg,
+    width: node.width,
+    height: node.height,
+    orientation: node.width > node.height ? "l" : "p",
+  };
+}
+
+async function convertFramesToSvg() {
   try {
     let nodes: SceneNode[] = [];
     if (!!figma.currentPage.selection.length) {
@@ -32,6 +45,9 @@ async function generateImages() {
     }
 
     nodes = frameSortByName(nodes);
+
+    //move sorted nodes at x:0,y:0
+
     let startingX = 0;
     let startingY = 0;
 
@@ -44,14 +60,8 @@ async function generateImages() {
       runningWidth += node.width + 400;
     });
 
+    let images = await Promise.all(nodes.map(generateSvg));
 
-    let images = await Promise.all(
-      nodes.map((node) =>
-        node.exportAsync({
-          format: "SVG_STRING",
-        })
-      )
-    );
     figma.ui.postMessage(images);
   } catch (e) {
     console.log(e);

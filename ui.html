@@ -23,33 +23,34 @@
       } else {
         const { jsPDF } = window.jspdf;
 
-        const doc = new jsPDF({ orientation: "l", format: [1920, 1080] });
-
-        let width = doc.internal.pageSize.width;
-        let height = doc.internal.pageSize.height;
+        let doc;
 
         const svgArr = event.data.pluginMessage;
-        console.log("===  svgArr:", svgArr);
 
-        svgArr.forEach((svg, i) => {
-          if (i > 0) {
-            doc.addPage();
-            doc.setPage(i + 1);
+        svgArr.forEach((svgItem, i) => {
+          let { svg, orientation, width, height } = svgItem;
+
+          let format = [width, height];
+
+          if (i === 0) {
+            doc = new jsPDF({ orientation, format });
+          } else {
+            doc.addPage(format, orientation);
           }
+
           svg = svg.replace(/\r?\n|\r/g, "").trim();
 
-          var canvas = document.createElement("canvas");
-          var context = canvas.getContext("2d");
+          let canvas = document.createElement("canvas");
+          let context = canvas.getContext("2d");
 
-          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.clearRect(0, 0, width, height);
 
-          canvg(canvas, svg)
+          canvg(canvas, svg);
 
-          var imgData = canvas.toDataURL("image/png");
+          let imgData = canvas.toDataURL("image/png");
 
           doc.addImage(imgData, "PNG", 0, 0, width, height);
         });
-        console.log("saving");
         doc.save("plugin.pdf");
       }
 
