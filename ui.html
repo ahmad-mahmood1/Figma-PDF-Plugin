@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Direct PDF Download</title>
     <script src="https://unpkg.com/jspdf@latest/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvg/1.5/canvg.min.js"></script>
   </head>
   <script>
     parent.postMessage(
@@ -21,17 +22,32 @@
         alert("No frames available");
       } else {
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: "l", format: [1080, 1920] });
+
+        const doc = new jsPDF({ orientation: "l", format: [1920, 1080] });
+
         let width = doc.internal.pageSize.width;
         let height = doc.internal.pageSize.height;
 
-        const images = event.data.pluginMessage;
-        images.forEach((unitArr, i) => {
+        const svgArr = event.data.pluginMessage;
+        console.log("===  svgArr:", svgArr);
+
+        svgArr.forEach((svg, i) => {
           if (i > 0) {
             doc.addPage();
             doc.setPage(i + 1);
           }
-          doc.addImage(unitArr, "PNG", 0, 0, width, height);
+          svg = svg.replace(/\r?\n|\r/g, "").trim();
+
+          var canvas = document.createElement("canvas");
+          var context = canvas.getContext("2d");
+
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          canvg(canvas, svg)
+
+          var imgData = canvas.toDataURL("image/png");
+
+          doc.addImage(imgData, "PNG", 0, 0, width, height);
         });
         console.log("saving");
         doc.save("plugin.pdf");

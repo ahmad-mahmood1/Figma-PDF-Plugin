@@ -44,15 +44,14 @@ async function generateImages() {
       runningWidth += node.width + 400;
     });
 
+
     let images = await Promise.all(
       nodes.map((node) =>
         node.exportAsync({
-          format: "PNG",
-          constraint: { type: "SCALE", value: 0.5 },
+          format: "SVG_STRING",
         })
       )
     );
-    // console.log("_", images);
     figma.ui.postMessage(images);
   } catch (e) {
     console.log(e);

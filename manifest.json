@@ -8,6 +8,10 @@
   "enableProposedApi": false,
   "editorType": ["figma"],
   "networkAccess": {
-    "allowedDomains": ["https://api.figma.com", "https://unpkg.com"]
+    "allowedDomains": [
+      "https://api.figma.com",
+      "https://unpkg.com",
+      "https://cdnjs.cloudflare.com"
+    ]
   }
 }
