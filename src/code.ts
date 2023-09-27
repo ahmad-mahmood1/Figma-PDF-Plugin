@@ -17,16 +17,10 @@ figma.ui.onmessage = (message: message) => {
 };
 
 let generateExport = (format: exportType) => async (node: SceneNode) => {
-  let settings:
-    | ExportSettingsImage
-    | ExportSettingsSVGString
-    | ExportSettingsSVG;
+  let settings: ExportSettingsImage | ExportSettingsSVGString;
 
   if (format === "PNG") {
     settings = { format, constraint: { type: "SCALE", value: 1.2 } };
-  }
-  if (format === "SVG") {
-    settings = { format };
   } else {
     settings = { format };
   }
