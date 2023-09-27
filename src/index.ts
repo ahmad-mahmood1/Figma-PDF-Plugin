@@ -3,7 +3,7 @@ import {
   GENERATE_FRAME_IMAGES,
   NO_FRAMES_ON_PAGE,
 } from "./constants";
-import { frameSortByName, frameSortByXCoordinate } from "./helperFunctions";
+import { frameSortByXCoordinate } from "./helperFunctions";
 
 figma.showUI(__html__, { visible: false });
 
