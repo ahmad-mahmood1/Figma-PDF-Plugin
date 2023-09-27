@@ -24,8 +24,8 @@ async function generateSvg(node: SceneNode) {
 
   return {
     svg,
-    width: node.width,
-    height: node.height,
+    width: node.width * 2,
+    height: node.height * 2,
     orientation: node.width > node.height ? "l" : "p",
   };
 }
