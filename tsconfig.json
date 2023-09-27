@@ -2,16 +2,29 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["es6"],
-    "strict": true,
+    // "lib": ["es6"],
+    // "strict": true,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@figma"
     ],
     "outDir": "./dist",
     "jsx": "react",
-    "allowJs": true,
+    // "allowJs": true,
     "moduleResolution": "node"
   },
   "include": ["src/**/*.ts"]
 }
+
+
+// {
+//   "compilerOptions": {
+//     "target": "es6",
+//     "jsx": "react",
+//     "typeRoots": [
+//       "./node_modules/@types",
+//       "./node_modules/@figma"
+//     ]
+//   },
+//   "include": ["src/**/*.ts", "src/**/*.tsx"]
+// }

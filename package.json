@@ -1,20 +1,31 @@
 {
-  "name": "panelsort",
+  "name": "pdf-sort",
   "version": "1.0.0",
-  "description": "Your Figma Plugin",
-  "main": "index.js",
+  "description": "",
+  "main": "code.js",
   "scripts": {
-    "build": "webpack",
-    "watch": "npm run build -- --watch"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode=development --watch",
+    "build": "webpack --mode=production"
   },
-  "author": "Ahmad",
+  "author": "nurture",
   "license": "MIT",
   "devDependencies": {
     "@figma/plugin-typings": "*",
-    "ts-loader": "^9.4.4",
-    "typescript": "*",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4"
+    "@types/jspdf": "^2.0.0",
+    "@types/node": "^16.7.1",
+    "@types/react-dom": "^18.2.4",
+    "html-inline-script-webpack-plugin": "^3.1.0",
+    "html-webpack-plugin": "^5.3.2",
+    "style-loader": "^3.2.1",
+    "ts-loader": "^9.2.5",
+    "typescript": "^4.3.5",
+    "url-loader": "^4.1.1",
+    "webpack": "^5.82.0",
+    "webpack-cli": "^5.1.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "canvg": "^4.0.1",
+    "jspdf": "^2.5.1"
+  }
 }

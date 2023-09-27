@@ -48,17 +48,17 @@ async function convertFramesToSvg() {
 
     //move sorted nodes at x:0,y:0
 
-    let startingX = 0;
-    let startingY = 0;
+    // let startingX = 0;
+    // let startingY = 0;
 
-    let runningWidth = 0;
+    // let runningWidth = 0;
 
-    nodes.forEach((node, i) => {
-      node.x = startingX + runningWidth;
-      node.y = startingY;
+    // nodes.forEach((node, i) => {
+    //   node.x = startingX + runningWidth;
+    //   node.y = startingY;
 
-      runningWidth += node.width + 400;
-    });
+    //   runningWidth += node.width + 400;
+    // });
 
     let images = await Promise.all(nodes.map(generateSvg));
 
