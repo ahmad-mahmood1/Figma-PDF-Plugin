@@ -27,3 +27,17 @@ export function frameSortByName(arr: SceneNode[]): SceneNode[] {
 
   return sortedArray;
 }
+
+export function frameSortByXCoordinate(arr: SceneNode[]): SceneNode[] {
+  function sortOnXAxis(a: SceneNode, b: SceneNode) {
+    return a.x - b.x;
+  }
+
+  const sortedArray = arr.slice().sort(sortOnXAxis);
+
+  sortedArray.forEach((node, i) => {
+    node.name = (i + 1).toString();
+  });
+
+  return sortedArray;
+}
