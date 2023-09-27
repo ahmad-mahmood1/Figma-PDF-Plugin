@@ -1,18 +1,26 @@
 import jsPDF from "jspdf";
 
-import { GENERATE_FRAME_IMAGES, NO_FRAMES_ON_PAGE } from "./constants";
+import {
+  CLOSE_PLUGIN,
+  CONVERT_FRAMES,
+  NO_FRAMES_ON_PAGE,
+  SVG,
+  SVG_STRING,
+} from "./constants";
 
-import { Canvg, presets } from "canvg";
+import { exportType, message } from "../types";
+import { SVGToImage } from "./utils/svgToPng";
 
-onmessage = async (event) => {
+onmessage = (event: message) => {
+  console.log("===  event:", event);
   let message = event.data.pluginMessage;
 
-  if (message === NO_FRAMES_ON_PAGE) {
+  if (message.type === NO_FRAMES_ON_PAGE) {
     alert("No frames available");
   } else {
-    const svgArr = event.data.pluginMessage;
-
-    processSvgArrayIntoPDF(svgArr)
+    let data = message.data;
+    let format = message.type;
+    processNodesBufferArray(format, data)
       .then(() => {
         sendClosePluginMessage();
       })
@@ -24,11 +32,14 @@ onmessage = async (event) => {
   }
 };
 
-async function processSvgArrayIntoPDF(svgArr) {
+async function processNodesBufferArray(
+  exportType: exportType,
+  processedNodeArray
+) {
   let doc: jsPDF;
 
-  for (let i = 0; i <= svgArr.length - 1; i++) {
-    let { svg, orientation, width, height } = svgArr[i];
+  for (let i = 0; i <= processedNodeArray.length - 1; i++) {
+    let { data, orientation, width, height } = processedNodeArray[i];
     let format = [width, height];
 
     if (i === 0) {
@@ -37,37 +48,31 @@ async function processSvgArrayIntoPDF(svgArr) {
       doc.addPage(format, orientation);
     }
 
-    let pngURL = await toPng({ svg, width, height });
+    let imageData = data;
+    console.log("===  imageData:", imageData);
 
-    doc.addImage(pngURL, "PNG", 0, 0, width, height);
+    if (exportType === SVG_STRING) {
+      imageData = await SVGToImage({
+        svg: data,
+        mimetype: "image/png",
+        width: width * 2,
+        height: height * 2,
+      });
+    }
+    doc.addImage(imageData, "PNG", 0, 0, width, height);
   }
 
   doc.save("plugin.pdf");
 }
 
-async function toPng(data) {
-  const preset = presets.offscreen();
-  const { width, height, svg } = data;
-  const canvas = new OffscreenCanvas(width, height);
-  const ctx = canvas.getContext("2d");
-  const v = await Canvg.from(ctx, svg, preset);
-
-  await v.render();
-
-  const blob = await canvas.convertToBlob();
-  const pngUrl = URL.createObjectURL(blob);
-
-  return pngUrl;
-}
-
 function sendClosePluginMessage() {
-  parent.postMessage({ pluginMessage: "close_plugin" }, "*");
+  parent.postMessage({ pluginMessage: { type: CLOSE_PLUGIN } }, "*");
 }
 
 function sendInitMessage() {
   parent.postMessage(
     {
-      pluginMessage: GENERATE_FRAME_IMAGES,
+      pluginMessage: { type: CONVERT_FRAMES, data: SVG },
     },
     "*"
   );
