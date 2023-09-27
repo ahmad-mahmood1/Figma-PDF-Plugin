@@ -25,7 +25,6 @@
     "webpack-cli": "^5.1.1"
   },
   "dependencies": {
-    "canvg": "^4.0.1",
     "jspdf": "^2.5.1"
   }
 }
